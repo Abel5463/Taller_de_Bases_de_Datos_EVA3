@@ -1,0 +1,258 @@
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@loclahost
+Creating a Classic session to 'root@loclahost'
+Please provide the password for 'root@loclahost': ****
+MySQL Error 2005 (HY000): Unknown MySQL server host 'loclahost' (11001)
+ MySQL  SQL >
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': ****
+Save password for 'root@localhost'? [Y]es/[N]o/Ne[v]er (default No): n
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 11
+Server version: 8.0.32 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > create database eva3
+                               -> ;
+Query OK, 1 row affected (0.0047 sec)
+ MySQL  localhost:3306 ssl  SQL > CREATE TABLE personas (
+                               ->   id INT AUTO_INCREMENT PRIMARY KEY,
+                               ->   nombre VARCHAR(50) NOT NULL,
+                               ->   apellido_pat VARCHAR(50) NOT NULL,
+                               ->   apellido_mat VARCHAR(50),
+                               ->   fecha_nac DATE,
+                               ->   clave_rfc VARCHAR(50)
+                               -> );
+ERROR: 1046 (3D000): No database selected
+ MySQL  localhost:3306 ssl  SQL > \use eva3
+Default schema set to `eva3`.
+Fetching global names, object names from `eva3` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  eva3  SQL > CREATE TABLE personas (
+                                     ->   id INT AUTO_INCREMENT PRIMARY KEY,
+                                     ->   nombre VARCHAR(50) NOT NULL,
+                                     ->   apellido_pat VARCHAR(50) NOT NULL,
+                                     ->   apellido_mat VARCHAR(50),
+                                     ->   fecha_nac DATE,
+                                     ->   clave_rfc VARCHAR(50)
+                                     -> );
+Query OK, 0 rows affected (0.0235 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generar_rfc('Juan', 'Pérez', 'García', '1990-06-15') into @prueba;
+Query OK, 1 row affected (0.0094 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > select @prueba;
++---------+
+| @prueba |
++---------+
+| NULL    |
++---------+
+1 row in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generar_rfc('Juan', 'Pérez', 'García', '1990-06-15') into @prueba;
+Query OK, 1 row affected (0.0017 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > select @prueba;
++---------+
+| @prueba |
++---------+
+| NULL    |
++---------+
+1 row in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generar_rfc('Gabriel', 'Morales', 'Ochoa', '2002-11-27') into @prueba;
+ERROR: 1172 (42000): Result consisted of more than one row
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generar_rfc('1','Gabriel', 'Morales', 'Ochoa', '2002-11-27') into @prueba;
+ERROR: 1172 (42000): Result consisted of more than one row
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generar_rfc('1','Gabriel', 'Morales', 'Ochoa', '2002-11-27') into @prueba;
+ERROR: 1172 (42000): Result consisted of more than one row
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generar_rfc('1','Gabriel', 'Morales', 'Ochoa', '2002-11-27') into @prueba;
+ERROR: 1172 (42000): Result consisted of more than one row
+ MySQL  localhost:3306 ssl  eva3  SQL > select * from personas;
++----+---------+--------------+--------------+------------+-----------+
+| id | nombre  | apellido_pat | apellido_mat | fecha_nac  | clave_rfc |
++----+---------+--------------+--------------+------------+-----------+
+|  1 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  2 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  3 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  4 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  5 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  6 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  7 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  8 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  9 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+| 10 | Gabriel | Morales      | NULL         | 2002-11-27 | NULL      |
++----+---------+--------------+--------------+------------+-----------+
+10 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generar_rfc(id, nombre, apellido_pat, apellido_mat, fecha_nac) as rfc FROM personas WHERE id = 1;
+ERROR: 1172 (42000): Result consisted of more than one row
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generar_rfc('1','Gabriel', 'Morales', 'Ochoa', '2002-11-27') into @prueba;
+ERROR: 1172 (42000): Result consisted of more than one row
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generar_rfc(1);
+ERROR: 1172 (42000): Result consisted of more than one row
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generar_rfc('Gabriel', 'Morales', 'Ochoa', '2002-11-27') into @prueba;
+ERROR: 1305 (42000): FUNCTION eva3.generar_rfc does not exist
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generarRFC('Gabriel', 'Morales', 'Ochoa', '2002-11-27') into @prueba;
+Query OK, 1 row affected (0.0009 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > select @prueba;
++------------+
+| @prueba    |
++------------+
+| MoOG021127 |
++------------+
+1 row in set (0.0004 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generarRFC('Gabriel', 'Morales', 'Ochoa', '2002-11-27') into @prueba;
+ERROR: 1406 (22001): Data too long for column 'año' at row 1
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generarRFC('Gabriel', 'Morales', 'Ochoa', '2002-11-27') into @prueba;
+Query OK, 1 row affected (0.0010 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > select @prueba;
++--------------+
+| @prueba      |
++--------------+
+| MoOG20021127 |
++--------------+
+1 row in set (0.0003 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > call insertarRFC();
+ERROR: 1318 (42000): Incorrect number of arguments for FUNCTION eva3.generarRFC; expected 4, got 5
+ MySQL  localhost:3306 ssl  eva3  SQL > call insertarRFC();
+Query OK, 0 rows affected (0.0039 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > select * from personas;
++----+---------+--------------+--------------+------------+-----------+
+| id | nombre  | apellido_pat | apellido_mat | fecha_nac  | clave_rfc |
++----+---------+--------------+--------------+------------+-----------+
+|  1 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  2 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  3 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  4 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  5 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  6 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  7 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  8 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  9 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+| 10 | Gabriel | Morales      | NULL         | 2002-11-27 | NULL      |
++----+---------+--------------+--------------+------------+-----------+
+10 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > CALL actualizar_rfc();
+ERROR: 1305 (42000): PROCEDURE eva3.actualizar_rfc does not exist
+ MySQL  localhost:3306 ssl  eva3  SQL > CALL insertar_rfc();
+ERROR: 1318 (42000): Incorrect number of arguments for FUNCTION eva3.generar_rfc; expected 4, got 5
+ MySQL  localhost:3306 ssl  eva3  SQL > CALL insertar_rfc();
+Query OK, 0 rows affected (0.0031 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > select * from personas;
++----+---------+--------------+--------------+------------+-----------+
+| id | nombre  | apellido_pat | apellido_mat | fecha_nac  | clave_rfc |
++----+---------+--------------+--------------+------------+-----------+
+|  1 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  2 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  3 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  4 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  5 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  6 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  7 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  8 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  9 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+| 10 | Gabriel | Morales      | NULL         | 2002-11-27 | NULL      |
++----+---------+--------------+--------------+------------+-----------+
+10 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > CALL llenar_rfc();
+ERROR: 1305 (42000): PROCEDURE eva3.llenar_rfc does not exist
+ MySQL  localhost:3306 ssl  eva3  SQL > CALL llenarRFC();
+ERROR: 1318 (42000): Incorrect number of arguments for FUNCTION eva3.generar_rfc; expected 4, got 5
+ MySQL  localhost:3306 ssl  eva3  SQL > CALL llenar_rfc();
+Query OK, 0 rows affected (0.0047 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > select * from personas;
++----+---------+--------------+--------------+------------+-----------+
+| id | nombre  | apellido_pat | apellido_mat | fecha_nac  | clave_rfc |
++----+---------+--------------+--------------+------------+-----------+
+|  1 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  2 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  3 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  4 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  5 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  6 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  7 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  8 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  9 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+| 10 | Gabriel | Morales      | NULL         | 2002-11-27 | NULL      |
++----+---------+--------------+--------------+------------+-----------+
+10 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > call llenar_clave_rfc();
+Query OK, 0 rows affected (0.0026 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > call actualizar_rfc();
+Query OK, 0 rows affected (0.0026 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > select * from personas;
++----+---------+--------------+--------------+------------+-----------+
+| id | nombre  | apellido_pat | apellido_mat | fecha_nac  | clave_rfc |
++----+---------+--------------+--------------+------------+-----------+
+|  1 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  2 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  3 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  4 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  5 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  6 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  7 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  8 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+|  9 | Gabriel | Morales      | Ochoa        | 2002-11-27 | NULL      |
+| 10 | Gabriel | Morales      | NULL         | 2002-11-27 | NULL      |
++----+---------+--------------+--------------+------------+-----------+
+10 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generar_RFC('Gabriel', 'Morales', 'Ochoa', '2002-11-27') into @prueba;
+Query OK, 1 row affected (0.0005 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > select @prueba;
++--------------+
+| @prueba      |
++--------------+
+| MoOG20021127 |
++--------------+
+1 row in set (0.0004 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > SELECT generar_RFC('Gabriel', 'Morales', 'Ochoa', '2002-11-27') into @prueba2;
+Query OK, 1 row affected (0.0005 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > select @prueba2;
++--------------+
+| @prueba2     |
++--------------+
+| MoOG20021127 |
++--------------+
+1 row in set (0.0003 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > desc personas;
++--------------+-------------+------+-----+---------+----------------+
+| Field        | Type        | Null | Key | Default | Extra          |
++--------------+-------------+------+-----+---------+----------------+
+| id           | int         | NO   | PRI | NULL    | auto_increment |
+| nombre       | varchar(50) | NO   |     | NULL    |                |
+| apellido_pat | varchar(50) | NO   |     | NULL    |                |
+| apellido_mat | varchar(50) | YES  |     | NULL    |                |
+| fecha_nac    | date        | YES  |     | NULL    |                |
+| clave_rfc    | varchar(50) | YES  |     | NULL    |                |
++--------------+-------------+------+-----+---------+----------------+
+6 rows in set (0.0017 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > call actualizar_rfc();
+Query OK, 0 rows affected (0.0024 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > call actualizar_rfc();
++------------------------------+
+| mensaje                      |
++------------------------------+
+| Se actualizaron 10 registros |
++------------------------------+
+1 row in set (0.0033 sec)
+
+Query OK, 0 rows affected (0.0033 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL > select * from personas;
++----+---------+--------------+--------------+------------+--------------+
+| id | nombre  | apellido_pat | apellido_mat | fecha_nac  | clave_rfc    |
++----+---------+--------------+--------------+------------+--------------+
+|  1 | Gabriel | Morales      | Ochoa        | 2002-11-27 | MoOG20021127 |
+|  2 | Gabriel | Morales      | Ochoa        | 2002-11-27 | MoOG20021127 |
+|  3 | Gabriel | Morales      | Ochoa        | 2002-11-27 | MoOG20021127 |
+|  4 | Gabriel | Morales      | Ochoa        | 2002-11-27 | MoOG20021127 |
+|  5 | Gabriel | Morales      | Ochoa        | 2002-11-27 | MoOG20021127 |
+|  6 | Gabriel | Morales      | Ochoa        | 2002-11-27 | MoOG20021127 |
+|  7 | Gabriel | Morales      | Ochoa        | 2002-11-27 | MoOG20021127 |
+|  8 | Gabriel | Morales      | Ochoa        | 2002-11-27 | MoOG20021127 |
+|  9 | Gabriel | Morales      | Ochoa        | 2002-11-27 | MoOG20021127 |
+| 10 | Gabriel | Morales      | NULL         | 2002-11-27 | MoXG20021127 |
++----+---------+--------------+--------------+------------+--------------+
+10 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  eva3  SQL >
